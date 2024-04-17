@@ -1,0 +1,29 @@
+To  cookie authentication to your ASP.NET Core MVC application, follow these steps:
+
+Add the Authentication Middleware services by using the AddAuthentication and AddCookie methods. Ensure you call UseAuthentication and UseAuthorization before mapping methods like MapRazorPages and MapDefaultControllerRoute.
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
+
+Configure the CookieAuthenticationOptions in the AddCookie method. This includes settings like ExpireTimeSpan, SlidingExpiration, and AccessDeniedPath.
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/Forbidden/";
+    });
+
+Implement the logic to create an authentication cookie. This involves creating a ClaimsIdentity with user claims and calling SignInAsync.
+
+Implement the logic to sign out the user and delete their cookie using SignOutAsync.
+
+Optionally, handle scenarios where you need to react to backend changes by implementing the ValidatePrincipal event in a class that derives from CookieAuthenticationEvents.
+
+Optionally, configure persistent cookies by setting IsPersistent to true in AuthenticationProperties when calling SignInAsync.
+
+Optionally, set an absolute expiration time for the cookie by setting ExpiresUtc in AuthenticationProperties when calling SignInAsync.
+
+By following these steps, you can add cookie authentication to your ASP.NET Core MVC application, allowing users to register, log in, and access protected resources.
